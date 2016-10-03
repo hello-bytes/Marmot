@@ -1,0 +1,67 @@
+#!/bin/bash
+
+
+function getCurUserDir(){
+  echo "/Users/"$USER;
+}
+
+function doctor(){
+  curdir=$(getCurUserDir)"/marmot/tools"
+  if [ ! -d ${curdir} ]
+  then
+    mkdir -p ${curdir}
+  fi
+}
+
+function curlInstall(){
+  echo "1"
+}
+
+function install(){
+  if [ `curlInstall`"_" = "1_" ]
+  then
+    cd /tmp
+    rm -rf $1
+    echo "get the tool from https://github.com/shishengyi/Marmot/raw/master/tools/$1"
+    curl "https://github.com/shishengyi/Marmot/raw/master/README.md/tools/$1" > $1
+    
+    chmod +x $1
+    cp $1 "$(getCurUserDir)/marmot/tools/$1"
+    echo "$1 installed success"
+  else
+    echo "install need install curl first"
+  fi
+}
+
+function run(){
+  # find file
+  runfile=$(getCurUserDir)"/marmot/tools/"$1
+  if [ ! -f ${runfile} ];then
+    runfile=$(getCurUserDir)"/marmot/tools/"$1".sh";
+    if [ ! -f ${runfile} ];then
+      echo "${runfile} not exist"
+      exit
+    fi
+  fi
+
+  shift
+  bash ${runfile} $*
+
+  #echo $cmd;
+  #eval ${cmd}
+}
+
+doctor
+case $1 in
+  install)
+    shift
+    install $*;
+    ;;
+  run)
+    shift
+    run $*;
+    ;;
+  *)
+    echo "please input install ***"
+    ;;
+esac

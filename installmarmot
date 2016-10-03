@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ ! -f "./app/marmot" ]
+then
+  echo "marmot not exist,please check it from ...."
+  exit
+fi
+
+echo "find the marmot file, will make it global"
+
+if [ -f "/usr/local/bin/marmot" ]
+then
+  if [ $1_ != "update_" ]
+  then
+    echo "the /usr/local/bin/marmot exist, maybe you have install one"
+    echo "if you want to update this file, use base installmarmot update"
+    exit
+  else
+    rm -rf /usr/local/bin/marmot
+  fi
+fi
+
+cp ./app/marmot /usr/local/bin/marmot
+chmod +x /usr/local/bin/marmot
+
+echo "the marmot install success, have fun"
