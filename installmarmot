@@ -6,6 +6,7 @@ function curlInstall(){
 
 if [ `curlInstall`"_" = "1_" ]
 then
+  echo "check env, curl is installed"
 else
   echo "sorry you need install curl first"
   exit
