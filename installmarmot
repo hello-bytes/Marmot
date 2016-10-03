@@ -1,12 +1,22 @@
 #!/bin/bash
 
-if [ ! -f "./app/marmot" ]
+function curlInstall(){
+  echo "1"
+}
+
+if [ `curlInstall`"_" = "1_" ]
 then
-  echo "marmot not exist,please check it from ...."
+else
+  echo "sorry you need install curl first"
   exit
 fi
 
-echo "find the marmot file, will make it global"
+
+cd /tmp
+rm -rf marmot
+echo "get the tool from https://raw.githubusercontent.com/shishengyi/Marmot/master/app/marmot"
+curl "https://raw.githubusercontent.com/shishengyi/Marmot/master/app/marmot" > marmot
+chmod +x marmot
 
 if [ -f "/usr/local/bin/marmot" ]
 then
@@ -20,7 +30,7 @@ then
   fi
 fi
 
-cp ./app/marmot /usr/local/bin/marmot
+cp marmot /usr/local/bin/marmot
 chmod +x /usr/local/bin/marmot
 
 echo "the marmot install success, have fun"
