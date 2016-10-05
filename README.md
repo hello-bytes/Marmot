@@ -28,5 +28,5 @@ marmot <toolname> [arg0 arg1...]
 * marmot uninstall <toolname>：删除某一工具
 * marmot all：查看帮助文档
 
-
+# 其它
 个人使用，欢迎fork，fork以后修改app/marmot中的github地址即可变成自己的私有工具集
