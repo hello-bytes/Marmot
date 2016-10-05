@@ -43,6 +43,66 @@ function run(){
   bash ${runfile} $*
 }
 
+function checkUrlAndDownload(){
+  url=$1
+  filename=$2
+  echo "check url : ${url}"
+  httpCode=`curl -o /dev/null -s -w %{http_code} ${url}`
+  if [ ${httpCode}"_" = "200_" ]
+  then
+    echo "check ok, begin downing..."
+    curl ${url} > ${filename}
+    return 0
+  else
+    echo "failure,the http code : "${httpCode}
+    return 1
+  fi
+}
+
+function install(){
+  if [ -f ${MARMOT_PATH_TOOLS}"/"$1 ]
+  then
+    echo ${MARMOT_PATH_TOOLS}"/"$1" existed, install success"
+    echo "if you want to update the tool, please run \"marmot update $1\""
+    exit
+  fi
+
+  if [ ${MARMOT_CURLINSTALL}"_" = "1_" ]
+  then
+    cd /tmp
+    rm -rf $1
+
+    url=${MARMOT_TOOLSURL}$1
+    checkUrlAndDownload ${url} $1
+    if [ $? != 0 ]
+    then
+      url=${url}".sh"
+      checkUrlAndDownload ${url} $1
+      if [ $? != 0 ]
+      then
+        echo "exit install, install failure!!"
+        exit
+      fi
+    fi
+
+    if [ ! -f "/tmp"$1 ]
+    then
+      echo "download file failure, install failure"
+      exit 1
+    fi
+
+    echo "set execute property"
+    chmod +x $1
+
+    echo "copy the file to ${MARMOT_PATH_TOOLS}"
+    cp $1 "${MARMOT_PATH_TOOLS}/$1"
+
+    echo "$1 installed success"
+  else
+    echo "install need install curl first"
+  fi
+}
+
 function help(){
   echo "======== ############################################ ========"
   echo "======== welcome to marmot tools,I am a tools manager ========"
@@ -68,7 +128,7 @@ fi
 case $1 in
   install)
     shift
-    bash install $*
+    install $*
     ;;
   run)
     shift
