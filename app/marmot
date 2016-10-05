@@ -103,6 +103,54 @@ function install(){
   fi
 }
 
+function uninstall(){
+  rm -f ${MARMOT_PATH_TOOLS}/$1
+  rm -f ${MARMOT_PATH_TOOLS}/$1".sh"
+
+  echo "uninstall success"
+}
+
+function view(){
+  if [ -f ${MARMOT_PATH_TOOLS}/$1 ]
+  then
+    cat ${MARMOT_PATH_TOOLS}/$1
+    exit
+  fi
+
+  if [ -f ${MARMOT_PATH_TOOLS}/$1".sh" ]
+  then
+    cat ${MARMOT_PATH_TOOLS}/$1".sh"
+    exit
+  fi
+
+  echo "Command $1 not installed, check your spell or maybe you should run \"marmot install $1\" first"
+}
+
+function list(){
+  cd ${MARMOT_PATH_TOOLS}
+  ls
+}
+
+function edit(){
+  if [ -f ${MARMOT_PATH_TOOLS}/$1 ]
+  then
+    atom ${MARMOT_PATH_TOOLS}/$1
+    exit
+  fi
+
+  if [ -f ${MARMOT_PATH_TOOLS}/$1".sh" ]
+  then
+    atom ${MARMOT_PATH_TOOLS}/$1".sh"
+    exit
+  fi
+
+  echo "Command $1 not installed, check your spell or maybe you should run \"marmot install $1\" first"
+}
+
+function alltools(){
+  echo "removefile deployblog deploytuboshu"
+}
+
 function help(){
   echo "======== ############################################ ========"
   echo "======== welcome to marmot tools,I am a tools manager ========"
@@ -113,6 +161,10 @@ function help(){
   echo "marmot uninstall removefile : the file ${MARMOT_PATH_TOOLS}/removefile.sh will be delete"
   echo "marmot update removefile : just like marmot uninstall removefile && marmot install removefile"
   echo "marmot removefile : execute ${MARMOT_PATH_TOOLS}/removefile.sh"
+  echo "marmot all: list all online tools"
+  echo "marmot list : list all installed tools"
+  echo "marmot view <toolname>: open tool with cat command"
+  echo "marmot edit <toolname>: edit tool with atom"
   echo "for more information, visit ${MARMOT_GITHUB}"
   echo "Have a good fun"
 }
@@ -130,9 +182,28 @@ case $1 in
     shift
     install $*
     ;;
+  uninstall)
+    shift
+    uninstall $*
+    ;;
   run)
     shift
     run $*
+    ;;
+  view)
+    shift
+    view $*
+    ;;
+  list)
+    shift
+    list $*
+    ;;
+  edit)
+    shift
+    edit $*
+    ;;
+  all)
+    alltools
     ;;
   help)
     help
