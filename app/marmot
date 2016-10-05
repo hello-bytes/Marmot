@@ -10,7 +10,7 @@ export MARMOT_PATH=`getCurUserDir`
 export MARMOT_PATH_TOOLS=${MARMOT_PATH}"/tools"
 
 function doctor(){
-  curdir=$(getCurUserDir)"/marmot/tools"
+  curdir=${MARMOT_PATH_TOOLS}
   if [ ! -d ${curdir} ]
   then
     mkdir -p ${curdir}
@@ -24,15 +24,15 @@ export MARMOT_CURLINSTALL=`curlInstall`
 
 function commandNotFound(){
   echo "Command $1 can not found at:"
-  echo ${MARMOT_PATH}"/marmot/tools/"$1
-  echo ${MARMOT_PATH}"/marmot/tools/"$1".sh"
+  echo ${MARMOT_PATH_TOOLS}"/"$1
+  echo ${MARMOT_PATH_TOOLS}"/"$1".sh"
   echo "may be you should call \"marmot install $1\" at first"
 }
 
 function run(){
-  runfile=$(getCurUserDir)"/marmot/tools/"$1
+  runfile=${MARMOT_PATH_TOOLS}"/"$1
   if [ ! -f ${runfile} ];then
-    runfile=$(getCurUserDir)"/marmot/tools/"$1".sh";
+    runfile=${MARMOT_PATH_TOOLS}"/"$1".sh";
     if [ ! -f ${runfile} ];then
       commandNotFound $1
       exit
