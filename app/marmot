@@ -85,17 +85,17 @@ function install(){
       fi
     fi
 
-    if [ ! -f "/tmp"$1 ]
+    if [ ! -f "/tmp/"$1 ]
     then
       echo "download file failure, install failure"
       exit 1
     fi
 
     echo "set execute property"
-    chmod +x $1
+    chmod +x "/tmp/"$1
 
     echo "copy the file to ${MARMOT_PATH_TOOLS}"
-    cp $1 "${MARMOT_PATH_TOOLS}/$1"
+    cp "/tmp/"$1 "${MARMOT_PATH_TOOLS}/$1"
 
     echo "$1 installed success"
   else
