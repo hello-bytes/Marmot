@@ -24,7 +24,7 @@ function install(){
     rm -rf $1
     echo "get the tool from https://github.com/shishengyi/Marmot/raw/master/tools/$1"
     curl "https://github.com/shishengyi/Marmot/raw/master/README.md/tools/$1" > $1
-    
+
     chmod +x $1
     cp $1 "$(getCurUserDir)/marmot/tools/$1"
     echo "$1 installed success"
@@ -34,6 +34,7 @@ function install(){
 }
 
 function run(){
+  #echo "run"
   # find file
   runfile=$(getCurUserDir)"/marmot/tools/"$1
   if [ ! -f ${runfile} ];then
@@ -55,11 +56,11 @@ doctor
 case $1 in
   install)
     shift
-    install $*;
+    install $*
     ;;
   run)
     shift
-    run $*;
+    run $*
     ;;
   *)
     echo "please input install ***"

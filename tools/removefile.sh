@@ -1,11 +1,14 @@
 #!/bin/bash
 
-workpath=`pwd`
-echo "work path : "${workpath}
-
 function listFiles(){
   echo "list files : $1"
-  for file in `find . -name "*.$1"`
+
+  findpatten="*.$1"
+  if [ $1"_" = "all_" ]
+  then
+    findpatten="*"
+  fi
+  for file in `find . -name "${findpatten}"`
   do
     echo ${file}
   done
@@ -14,8 +17,12 @@ function listFiles(){
 function printFiles(){
   for i in $*;
   do
+    #echo "p"
+    #echo $i"--"
+    #echo "==p"
     listFiles $i
   done
+
 }
 
 function deleteFiles(){
@@ -32,26 +39,17 @@ case $1 in
     ;;
   delete)
     shift;
-    deleteFiles $*;
+    deleteFiles $*
     ;;
   *)
-    echo "please input install ***"
+    echo "please input===== install ***"
     ;;
 esac
 
 
-
-
-pcount=$#
-for ((i=1; i < pcount; i++));do
-  let result=i+1
-  var=${!result}
-  echo $var
-done
-
-
-
-for file in `find . -name "*.txt"`
-do
-  echo ${file}
-done
+#pcount=$#
+#for ((i=1; i < pcount; i++));do
+#  let result=i+1
+#  var=${!result}
+#  echo $var
+#done
