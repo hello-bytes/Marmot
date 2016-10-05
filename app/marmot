@@ -4,7 +4,7 @@ export MARMOT_GITHUB="https://github.com/shishengyi/Marmot"
 export MARMOT_TOOLSURL="https://raw.githubusercontent.com/shishengyi/Marmot/master/tools/"
 
 function getCurUserDir(){
-  echo "/Users/"$USER;
+  echo "/Users/"$USER"/marmot";
 }
 export MARMOT_PATH=`getCurUserDir`
 export MARMOT_PATH_TOOLS=${MARMOT_PATH}"/tools"
@@ -21,22 +21,6 @@ function curlInstall(){
   echo "1"
 }
 export MARMOT_CURLINSTALL=`curlInstall`
-
-function install(){
-  if [ `curlInstall`"_" = "1_" ]
-  then
-    cd /tmp
-    rm -rf $1
-    echo "get the tool from ${MARMOT_TOOLSURL}$1"
-    curl "${MARMOT_TOOLSURL}$1" > $1
-
-    chmod +x $1
-    cp $1 "$(getCurUserDir)/marmot/tools/$1"
-    echo "$1 installed success"
-  else
-    echo "install need install curl first"
-  fi
-}
 
 function commandNotFound(){
   echo "Command $1 can not found at:"
@@ -84,7 +68,7 @@ fi
 case $1 in
   install)
     shift
-    install $*
+    bash install $*
     ;;
   run)
     shift
