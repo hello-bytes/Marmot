@@ -17,12 +17,8 @@ function listFiles(){
 function printFiles(){
   for i in $*;
   do
-    #echo "p"
-    #echo $i"--"
-    #echo "==p"
     listFiles $i
   done
-
 }
 
 function deleteFiles(){
@@ -31,6 +27,20 @@ function deleteFiles(){
     echo $i
   done
 }
+
+function help(){
+  echo "I can print and delete file by ext recursion，please call me like this:"
+  echo "marmot removefile print <extension name>"
+  echo "marmot removefile delete <extension name>"
+  echo "all means all the file"
+  echo "e.g : marmot removefile print all will print all the file(except folder)"
+}
+
+if [ $# = 0 ]
+then
+  help
+  exit 0
+fi
 
 case $1 in
   print)

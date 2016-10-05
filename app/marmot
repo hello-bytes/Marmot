@@ -1,9 +1,13 @@
 #!/bin/bash
 
+export MARMOT_GITHUB="https://github.com/shishengyi/Marmot"
+export MARMOT_TOOLSURL="https://raw.githubusercontent.com/shishengyi/Marmot/master/tools/"
 
 function getCurUserDir(){
   echo "/Users/"$USER;
 }
+export MARMOT_PATH=`getCurUserDir`
+export MARMOT_PATH_TOOLS=${MARMOT_PATH}"/tools"
 
 function doctor(){
   curdir=$(getCurUserDir)"/marmot/tools"
@@ -16,14 +20,15 @@ function doctor(){
 function curlInstall(){
   echo "1"
 }
+export MARMOT_CURLINSTALL=`curlInstall`
 
 function install(){
   if [ `curlInstall`"_" = "1_" ]
   then
     cd /tmp
     rm -rf $1
-    echo "get the tool from https://github.com/shishengyi/Marmot/raw/master/tools/$1"
-    curl "https://github.com/shishengyi/Marmot/raw/master/README.md/tools/$1" > $1
+    echo "get the tool from ${MARMOT_TOOLSURL}$1"
+    curl "${MARMOT_TOOLSURL}$1" > $1
 
     chmod +x $1
     cp $1 "$(getCurUserDir)/marmot/tools/$1"
@@ -33,26 +38,49 @@ function install(){
   fi
 }
 
+function commandNotFound(){
+  echo "Command $1 can not found at:"
+  echo ${MARMOT_PATH}"/marmot/tools/"$1
+  echo ${MARMOT_PATH}"/marmot/tools/"$1".sh"
+  echo "may be you should call \"marmot install $1\" at first"
+}
+
 function run(){
-  #echo "run"
-  # find file
   runfile=$(getCurUserDir)"/marmot/tools/"$1
   if [ ! -f ${runfile} ];then
     runfile=$(getCurUserDir)"/marmot/tools/"$1".sh";
     if [ ! -f ${runfile} ];then
-      echo "${runfile} not exist"
+      commandNotFound $1
       exit
     fi
   fi
 
   shift
   bash ${runfile} $*
+}
 
-  #echo $cmd;
-  #eval ${cmd}
+function help(){
+  echo "======== ############################################ ========"
+  echo "======== welcome to marmot tools,I am a tools manager ========"
+  echo "======== ############################################ ========"
+  echo "I can install/uninstall/update/run tools,the tools is from ${MARMOT_GITHUB}"
+  echo "for example:"
+  echo "marmot install removefile : install a tool named removefile from ${MARMOT_TOOLSURL}, this shell will copy to ${MARMOT_PATH_TOOLS}"
+  echo "marmot uninstall removefile : the file ${MARMOT_PATH_TOOLS}/removefile.sh will be delete"
+  echo "marmot update removefile : just like marmot uninstall removefile && marmot install removefile"
+  echo "marmot removefile : execute ${MARMOT_PATH_TOOLS}/removefile.sh"
+  echo "for more information, visit ${MARMOT_GITHUB}"
+  echo "Have a good fun"
 }
 
 doctor
+
+if [ $# = 0 ]
+then
+  help
+  exit 0
+fi
+
 case $1 in
   install)
     shift
@@ -62,7 +90,10 @@ case $1 in
     shift
     run $*
     ;;
+  help)
+    help
+    ;;
   *)
-    echo "please input install ***"
+    run $*
     ;;
 esac
