@@ -29,6 +29,17 @@ function commandNotFound(){
   echo "may be you should call \"marmot install $1\" at first"
 }
 
+function isToolExist(){
+  runfile=${MARMOT_PATH_TOOLS}"/"$1
+  if [ ! -f ${runfile} ];then
+    runfile=${MARMOT_PATH_TOOLS}"/"$1".sh";
+    if [ ! -f ${runfile} ];then
+      return 0
+    fi
+  fi
+  return 1
+}
+
 function run(){
   runfile=${MARMOT_PATH_TOOLS}"/"$1
   if [ ! -f ${runfile} ];then
@@ -151,6 +162,19 @@ function alltools(){
   echo "removefile deployblog deploytuboshu"
 }
 
+function editFile(){
+  atom $1
+}
+
+function create(){
+  isToolExist $1
+  if [ $? = 0 ]
+  then
+    echo -e "#!/bin/bash\n\n# we prepare the env, you just write your code\n\n" > ${MARMOT_PATH_TOOLS}"/"$1
+    editFile ${MARMOT_PATH_TOOLS}"/"$1
+  fi
+}
+
 function help(){
   echo "======== ############################################ ========"
   echo "======== welcome to marmot tools,I am a tools manager ========"
@@ -165,6 +189,7 @@ function help(){
   echo "marmot list : list all installed tools"
   echo "marmot view <toolname>: open tool with cat command"
   echo "marmot edit <toolname>: edit tool with atom"
+  echo "marmot create <toolname>: create tool with atom"
   echo "for more information, visit ${MARMOT_GITHUB}"
   echo "Have a good fun"
 }
@@ -204,6 +229,10 @@ case $1 in
     ;;
   all)
     alltools
+    ;;
+  create)
+    shift
+    create $*
     ;;
   help)
     help
