@@ -2,6 +2,7 @@
 
 export MARMOT_GITHUB="https://github.com/shishengyi/Marmot"
 export MARMOT_TOOLSURL="https://raw.githubusercontent.com/shishengyi/Marmot/master/tools/"
+export MARMOT_SELFURL="https://raw.githubusercontent.com/shishengyi/Marmot/master/app/marmot"
 
 function getCurUserDir(){
   echo "/Users/"$USER"/marmot";
@@ -175,6 +176,24 @@ function create(){
   fi
 }
 
+function update(){
+  url=${MARMOT_SELFURL}
+  filepath="/usr/local/bin/marmot"
+  checkUrlAndDownload ${url} ${filepath}
+  chmod +x ${filepath}
+}
+
+function global(){
+  oldpath=`pwd`
+  basepath=$(cd `dirname $0`; pwd)
+  filename=$(basename $0)
+  fullsourcefile=${basepath}"/"${filename}
+  cp ${fullsourcefile} /usr/local/bin/${filename}
+  chmod +x /usr/local/bin/${filename}
+
+  cd ${oldpath}
+}
+
 function help(){
   echo "======== ############################################ ========"
   echo "======== welcome to marmot tools,I am a tools manager ========"
@@ -233,6 +252,12 @@ case $1 in
   create)
     shift
     create $*
+    ;;
+  update)
+    update
+    ;;
+  global)
+    global
     ;;
   help)
     help
