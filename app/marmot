@@ -160,7 +160,7 @@ function edit(){
 }
 
 function alltools(){
-  echo "removefile deployblog deploytuboshu"
+  echo "removefile deployblog deploytuboshu androiddev"
 }
 
 function editFile(){
@@ -177,6 +177,17 @@ function create(){
 }
 
 function update(){
+  echo $#
+  if [ $# = 0 ]
+  then
+    updateself
+  else
+    uninstall $*
+    install $*
+  fi
+}
+
+function updateself(){
   url=${MARMOT_SELFURL}
   filepath="/usr/local/bin/marmot"
   checkUrlAndDownload ${url} ${filepath}
@@ -254,7 +265,8 @@ case $1 in
     create $*
     ;;
   update)
-    update
+    shift
+    update $*
     ;;
   global)
     global
